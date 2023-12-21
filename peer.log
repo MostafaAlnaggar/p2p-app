@@ -17,3 +17,207 @@ INFO:root:Send to 192.168.8.101:15500 -> HELLO ww
 INFO:root:Send to 192.168.8.101:15500 -> HELLO ww
 INFO:root:Send to 192.168.8.101:15500 -> HELLO ww
 INFO:root:Send to 192.168.8.101:15600 -> CANCEL ww
+INFO:root:Send to 192.168.8.101:15600 -> JOIN 56 7688b6ef52555962d008fff894223582c484517cea7da49ee67800adc7fc8866
+INFO:root:Received from 192.168.8.101 -> join-success
+INFO:root:Send to 192.168.8.101:15600 -> LOGIN 56 7688b6ef52555962d008fff894223582c484517cea7da49ee67800adc7fc8866 15400
+INFO:root:Received from 192.168.8.101 -> login-success
+INFO:root:Send to 192.168.8.101:15500 -> HELLO 56
+INFO:root:Send to 192.168.8.101:15500 -> HELLO 56
+INFO:root:Send to 192.168.8.101:15500 -> HELLO 56
+INFO:root:Send to 192.168.8.101:15500 -> HELLO 56
+INFO:root:Send to 192.168.8.101:15500 -> HELLO 56
+INFO:root:Send to 192.168.8.101:15600 -> LOGOUT 56
+ERROR:root:OSError: [WinError 10038] An operation was attempted on something that is not a socket
+INFO:root:Send to 192.168.8.101:15600 -> LOGIN 56 7688b6ef52555962d008fff894223582c484517cea7da49ee67800adc7fc8866 15400
+INFO:root:Received from 192.168.8.101 -> login-success
+INFO:root:Send to 192.168.8.101:15500 -> HELLO 56
+INFO:root:Send to 192.168.8.101:15500 -> HELLO 56
+INFO:root:Send to 192.168.8.101:15500 -> HELLO 56
+INFO:root:Send to 192.168.8.101:15600 -> LOGOUT 56
+ERROR:root:OSError: [WinError 10038] An operation was attempted on something that is not a socket
+INFO:root:Send to 192.168.8.101:15600 -> LOGIN 98965456 ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d 15000
+INFO:root:Received from 192.168.8.101 -> login-account-not-exist
+INFO:root:Send to 192.168.8.101:15600 -> LOGIN 56 7688b6ef52555962d008fff894223582c484517cea7da49ee67800adc7fc8866 15400
+INFO:root:Received from 192.168.8.101 -> login-success
+INFO:root:Send to 192.168.8.101:15500 -> HELLO 56
+INFO:root:Send to 192.168.8.101:15500 -> HELLO 56
+INFO:root:Send to 192.168.8.101:15500 -> HELLO 56
+INFO:root:Send to 192.168.8.101:15500 -> HELLO 56
+INFO:root:Send to 192.168.8.101:15500 -> HELLO 56
+INFO:root:Send to 192.168.8.101:15500 -> HELLO 56
+INFO:root:Send to 192.168.8.101:15500 -> HELLO 56
+INFO:root:Send to 192.168.8.101:15500 -> HELLO 56
+INFO:root:Send to 192.168.8.101:15500 -> HELLO 56
+INFO:root:Send to 192.168.8.101:15500 -> HELLO 56
+INFO:root:Send to 192.168.8.101:15500 -> HELLO 56
+INFO:root:Send to 192.168.8.101:15500 -> HELLO 56
+INFO:root:Send to 192.168.8.101:15500 -> HELLO 56
+INFO:root:Send to 192.168.8.101:15500 -> HELLO 56
+INFO:root:Send to 192.168.8.101:15600 -> LOGOUT 56
+ERROR:root:OSError: [WinError 10038] An operation was attempted on something that is not a socket
+INFO:root:Send to 192.168.8.101:15600 -> JOIN xyz 3608bca1e44ea6c4d268eb6db02260269892c0b42b86bbf1e77a6fa16c3c9282
+INFO:root:Received from 192.168.8.101 -> join-success
+INFO:root:Send to 192.168.8.101:15600 -> LOGIN xy 3608bca1e44ea6c4d268eb6db02260269892c0b42b86bbf1e77a6fa16c3c9282 15400
+INFO:root:Received from 192.168.8.101 -> login-account-not-exist
+INFO:root:Send to 192.168.8.101:15600 -> LOGIN xyz 769a4e6d0003189c7e96c5d9b7e810a0d11c3a12832527ec94b0f86d277f51ca 15400
+INFO:root:Received from 192.168.8.101 -> login-wrong-password
+INFO:root:Send to 192.168.8.101:15600 -> LOGIN xyz 3608bca1e44ea6c4d268eb6db02260269892c0b42b86bbf1e77a6fa16c3c9282 15400
+INFO:root:Received from 192.168.8.101 -> login-success
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15600 -> CANCEL xyz
+ERROR:root:OSError: [WinError 10038] An operation was attempted on something that is not a socket
+INFO:root:Send to 192.168.8.101:15600 -> LOGIN xyz 3608bca1e44ea6c4d268eb6db02260269892c0b42b86bbf1e77a6fa16c3c9282 15400
+INFO:root:Received from 192.168.8.101 -> login-success
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15600 -> SEARCH mostafa
+INFO:root:Received from 192.168.8.101 -> search-success 192.168.8.101:15400
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15600 -> SEARCH qwertgfd
+INFO:root:Received from 192.168.8.101 -> search-user-not-found
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15600 -> SEARCH 1
+INFO:root:Received from 192.168.8.101 -> search-user-not-online
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15600 -> LOGOUT xyz
+ERROR:root:OSError: [WinError 10038] An operation was attempted on something that is not a socket
+INFO:root:Send to 192.168.8.101:15600 -> LOGIN xyz 3608bca1e44ea6c4d268eb6db02260269892c0b42b86bbf1e77a6fa16c3c9282 15400
+INFO:root:Received from 192.168.8.101 -> login-success
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15600 -> LOGOUT xyz
+ERROR:root:OSError: [WinError 10038] An operation was attempted on something that is not a socket
+INFO:root:Send to 192.168.8.101:15600 -> JOIN test_account 8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92
+INFO:root:Received from 192.168.8.101 -> join-success
+INFO:root:Send to 192.168.8.101:15600 -> LOGIN test_account 8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92 15400
+INFO:root:Received from 192.168.8.101 -> login-success
+INFO:root:Send to 192.168.8.101:15500 -> HELLO test_account
+INFO:root:Send to 192.168.8.101:15500 -> HELLO test_account
+INFO:root:Send to 192.168.8.101:15500 -> HELLO test_account
+INFO:root:Send to 192.168.8.101:15500 -> HELLO test_account
+INFO:root:Send to 192.168.8.101:15500 -> HELLO test_account
+INFO:root:Send to 192.168.8.101:15500 -> HELLO test_account
+INFO:root:Send to 192.168.8.101:15500 -> HELLO test_account
+INFO:root:Send to 192.168.8.101:15500 -> HELLO test_account
+INFO:root:Send to 192.168.8.101:15500 -> HELLO test_account
+INFO:root:Send to 192.168.8.101:15500 -> HELLO test_account
+INFO:root:Send to 192.168.8.101:15500 -> HELLO test_account
+INFO:root:Send to 192.168.8.101:15500 -> HELLO test_account
+INFO:root:Send to 192.168.8.101:15500 -> HELLO test_account
+INFO:root:Send to 192.168.8.101:15500 -> HELLO test_account
+INFO:root:Send to 192.168.8.101:15600 -> CANCEL test_account
+ERROR:root:OSError: [WinError 10038] An operation was attempted on something that is not a socket
+INFO:root:Send to 192.168.8.101:15600 -> LOGIN xyz 3608bca1e44ea6c4d268eb6db02260269892c0b42b86bbf1e77a6fa16c3c9282 15400
+INFO:root:Received from 192.168.8.101 -> login-success
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15600 -> CANCEL xyz
+ERROR:root:OSError: [WinError 10038] An operation was attempted on something that is not a socket
+INFO:root:Send to 192.168.8.101:15600 -> LOGIN xyz 3608bca1e44ea6c4d268eb6db02260269892c0b42b86bbf1e77a6fa16c3c9282 15400
+INFO:root:Received from 192.168.8.101 -> login-success
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15600 -> LOGOUT xyz
+ERROR:root:OSError: [WinError 10038] An operation was attempted on something that is not a socket
+INFO:root:Send to 192.168.8.101:15600 -> LOGIN xyz 3608bca1e44ea6c4d268eb6db02260269892c0b42b86bbf1e77a6fa16c3c9282 15400
+INFO:root:Received from 192.168.8.101 -> login-success
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15600 -> CANCEL xyz
+ERROR:root:OSError: [WinError 10038] An operation was attempted on something that is not a socket
+INFO:root:Send to 192.168.8.101:15600 -> LOGIN xyz 3608bca1e44ea6c4d268eb6db02260269892c0b42b86bbf1e77a6fa16c3c9282 15400
+INFO:root:Received from 192.168.8.101 -> login-success
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15500 -> HELLO xyz
+INFO:root:Send to 192.168.8.101:15600 -> CANCEL xyz
+ERROR:root:OSError: [WinError 10038] An operation was attempted on something that is not a socket
