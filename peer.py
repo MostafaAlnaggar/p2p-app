@@ -3,18 +3,16 @@
     ##  Each peer has a client and a server side that runs on different threads
     ##  150114822 - Eren Ulaş
 """
-import hashlib
-import logging
-import threading
+import sys
 from socket import *
-
-import pwinput
+import hashlib
+import threading
 # import time
 import select
-from colorama import init
+import logging
+import pwinput
+from colorama import Fore, init
 init()
-from colorama import Fore
-
 
 
 # Server side of peer
@@ -44,7 +42,7 @@ class PeerServer(threading.Thread):
         self.chattingClientName = None
 
     # main method of the peer server thread
-    def run(self):  # PrivateChat
+    def run(self):
 
         print("Peer server started...")
 
@@ -582,9 +580,12 @@ class CommandLineInterface:
             self.peerClient.start()
             self.peerClient.join()
 
-
     def list_users(self):
         try:
+            # Establish a TCP connection with the registry
+            # registry_socket = socket(AF_INET, SOCK_STREAM)
+            # registry_socket.connect((self.registryName,self.registryPort))
+            # Send a request to the registry for online users
             request_message = "GET_ONLINE_USERS"
             self.tcpClientSocket.send(request_message.encode())
             # Receive the response from the registry
@@ -603,6 +604,8 @@ class CommandLineInterface:
             else:
                 print(Fore.RED + "No online users found.")
 
+        # # Close the socket
+        #     self.tcpClientSocket.close()
 
         except ConnectionError as e:
             print(f"Connection error: {e}")
