@@ -1,14 +1,8 @@
 from socket import *
 import threading
-from PeerServer import PeerServer
 from colorama import Fore, init
-import random
 
 init()
-
-color_codes = [Fore.MAGENTA, Fore.BLUE,  Fore.WHITE, Fore.YELLOW, Fore.CYAN,
-               Fore.LIGHTMAGENTA_EX, Fore.LIGHTWHITE_EX, Fore.LIGHTYELLOW_EX, Fore.LIGHTCYAN_EX]
-random_color = random.choice(color_codes)
 
 
 # Client side of peer
@@ -59,7 +53,7 @@ class PeerClient(threading.Thread):
             self.responseReceived = self.responseReceived.split()
             # if response is ok then incoming messages will be evaluated as client messages and will be sent to the
             # connected server
-            if self.responseReceived[0] == "OK":
+            if self.responseReceived[0].upper() == "OK":
                 # changes the status of this client's server to chatting
                 self.peerServer.isChatRequested = 1
                 # sets the server variable with the username of the peer that this one is chatting
@@ -88,7 +82,7 @@ class PeerClient(threading.Thread):
                     self.responseReceived = None
                     self.tcpClientSocket.close()
             # if the request is rejected, then changes the server status, sends a reject message to the connected
-            elif self.responseReceived[0] == "REJECT":
+            elif self.responseReceived[0].upper() == "REJECT":
                 self.peerServer.isChatRequested = 0
                 print(Fore.RED + "client of requester is closing...")
                 print(Fore.LIGHTBLACK_EX, end="")
@@ -101,7 +95,7 @@ class PeerClient(threading.Thread):
                 self.tcpClientSocket.close()
         # if the client is created with OK message it means that this is the client of receiver side peer, so it sends
         # an OK message to the requesting side peer server that it connects and then waits for the user inputs.
-        elif self.responseReceived == "OK":
+        elif self.responseReceived.upper() == "OK":
             # server status is changed
             self.peerServer.isChatRequested = 1
             # ok response is sent to the requester side
@@ -133,6 +127,19 @@ class PeerClient(threading.Thread):
             self.isEndingChat = False
             socketsArray = []
 
+            socketsArray.clear()
+            registryName = gethostbyname(gethostname())
+            registryPort = 15600
+            tcpClientSocket1 = socket(AF_INET, SOCK_STREAM)
+            tcpClientSocket1.connect((registryName, registryPort))
+
+            message = "GET-COLOR"
+            tcpClientSocket1.send(message.encode())
+
+            random_color = tcpClientSocket1.recv(1024).decode()
+
+            tcpClientSocket1.close()
+
             self.updateClients(socketsArray)
 
             for server in self.clientChattingClients:
@@ -144,7 +151,6 @@ class PeerClient(threading.Thread):
                     socketsArray[-1].send(message.encode())
 
             while not self.isEndingChat:
-                print(Fore.LIGHTBLACK_EX, end="")
                 # message input prompt
                 messageSent = input(Fore.LIGHTBLACK_EX)
                 self.updateClients(socketsArray)
@@ -155,7 +161,7 @@ class PeerClient(threading.Thread):
                             self.isEndingChat = True
                             self.peerServer.isChatRequested = 0
                             message = "LEAVE-CHAT-ROOM " + self.peerServer.peerServerHostname + " " + str(
-                                self.peerServer.peerServerPort) + " " + self.username  + " " + random_color + " "
+                                self.peerServer.peerServerPort) + " " + self.username + " " + random_color + " "
                             socketElement.send(message.encode())
                             socketElement.close()
                             self.peerServer.serverChattingClients.clear()
@@ -191,7 +197,6 @@ class PeerClient(threading.Thread):
                 socketElement.close()
                 socketsArray.remove(socketElement)
             self.responseReceived = None
-            self.tcpClientSocket.close()
 
     def updateClients(self, socketsArray):
         if len(self.clientChattingClients) == len(self.peerServer.serverChattingClients):
@@ -202,7 +207,8 @@ class PeerClient(threading.Thread):
                         self.setChattingClients(chatting_client)
                     socketsArray.clear()
                     for server in self.clientChattingClients:
-                        if not(server[0] == self.peerServer.peerServerHostname and server[1] == self.peerServer.peerServerPort):
+                        if not(server[0] == self.peerServer.peerServerHostname and
+                               server[1] == self.peerServer.peerServerPort):
                             socketsArray.append(socket(AF_INET, SOCK_STREAM))
                             socketsArray[-1].connect((server[0], server[1]))
                             break

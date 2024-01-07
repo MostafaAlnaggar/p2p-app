@@ -2,6 +2,14 @@ from socket import *
 import threading
 import select
 import db
+from colorama import Fore, init
+
+init()
+
+
+color_codes = [Fore.CYAN, Fore.MAGENTA, Fore.YELLOW, Fore.BLUE, Fore.WHITE,
+               Fore.LIGHTCYAN_EX, Fore.LIGHTMAGENTA_EX, Fore.LIGHTYELLOW_EX, Fore.LIGHTWHITE_EX]
+color_index = 0
 
 
 # This class is used to process the peer messages sent to registry
@@ -243,6 +251,11 @@ class ClientThread(threading.Thread):
                     self.leaveChatRoom(message)
                 elif message[0] == "GET_CHAT_ROOM_MEMBERS":
                     self.getChatRoomMembers(message)
+                elif message[0] == "GET-COLOR":
+                    global color_index
+                    response = color_codes[color_index]
+                    color_index = (color_index + 1) % len(color_codes)
+                    self.tcpClientSocket.send(response.encode())
 
             except OSError:
                 pass

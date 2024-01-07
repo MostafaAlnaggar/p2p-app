@@ -2,13 +2,8 @@ from socket import *
 import threading
 import select
 from colorama import Fore, init
-import random
 
 init()
-
-color_codes = [Fore.MAGENTA, Fore.BLUE,  Fore.WHITE, Fore.YELLOW, Fore.CYAN,
-               Fore.LIGHTMAGENTA_EX, Fore.LIGHTWHITE_EX, Fore.LIGHTYELLOW_EX, Fore.LIGHTCYAN_EX]
-random_color = random.choice(color_codes)
 
 
 # Server side of peer
@@ -101,8 +96,7 @@ class PeerServer(threading.Thread):
                                 self.chattingClientName = messageReceived[2]
                                 # prints prompt for the incoming chat request
                                 print(
-                                    Fore.LIGHTGREEN_EX + "Incoming chat request from " + self.chattingClientName +
-                                    ">> ")
+                                    Fore.LIGHTGREEN_EX + "Incoming chat request from " + self.chattingClientName)
                                 print("Enter OK to accept or REJECT to reject:  " + Fore.LIGHTBLACK_EX)
                                 # makes isChatRequested = 1 which means that peer is chatting with someone
                                 self.isChatRequested = 1
@@ -118,7 +112,6 @@ class PeerServer(threading.Thread):
                                 inputs.remove(s)
 
                         elif messageReceived.startswith("JOIN-CHAT-ROOM"):
-                            self.isChatRequested = 1
                             messageReceived = messageReceived.split(" ")
                             self.serverChattingClients.append([messageReceived[1], int(messageReceived[2])])
                             print(
@@ -132,43 +125,45 @@ class PeerServer(threading.Thread):
                             print(messageReceived[4] + f"{messageReceived[3]} left the chat room" + Fore.LIGHTBLACK_EX)
                         # if an OK message is received then ischatrequested is made 1 and then next messages will be
                         # shown to the peer of this server
-                        elif messageReceived == "OK":
+                        elif messageReceived.upper() == "OK":
                             self.isChatRequested = 1
                         # if an REJECT message is received then ischatrequested is made 0 so that it can receive any
                         # other chat requests
-                        elif messageReceived == "REJECT":
+                        elif messageReceived.upper() == "REJECT":
                             self.isChatRequested = 0
                             inputs.remove(s)
                         # if a message is received, and if this is not a quit message ':q' and
                         # if it is not an empty message, show this message to the user
-                        elif messageReceived[:2] != ":q" and len(messageReceived) != 0:
+                        elif messageReceived[:2] != ":q" and len(messageReceived) != 0 and self.isChatRequested == 1:
                             if "#%#" in str(messageReceived):
                                 messageReceived = messageReceived.split("#%#")
                                 print(messageReceived[2] + messageReceived[0] + ": " + messageReceived[
                                     1] + Fore.LIGHTBLACK_EX)
                             else:
                                 print(
-                                    Fore.LIGHTGREEN_EX + self.chattingClientName + ": " + messageReceived + Fore.LIGHTBLACK_EX)
+                                    Fore.GREEN + self.chattingClientName + ": " + Fore.WHITE + messageReceived +
+                                    Fore.LIGHTBLACK_EX)
                         # if the message received is a quit message ':q',
                         # makes ischatrequested 1 to receive new incoming request messages
                         # removes the socket of the connected peer from the inputs list
-                        elif messageReceived[:2] == ":q":
+                        elif messageReceived[:2] == ":q" and self.isChatRequested == 1:
                             self.isChatRequested = 0
                             inputs.clear()
                             inputs.append(self.tcpServerSocket)
                             # connected peer ended the chat
-                            if len(messageReceived) == 2:
-                                print(Fore.RED + "User you're chatting with ended the chat")
-                                print("Press enter to quit the chat: " + Fore.LIGHTBLACK_EX)
+                            print(Fore.RED + "User you're chatting with ended the chat")
+                            print("Press enter to quit the chat: " + Fore.LIGHTBLACK_EX)
 
                         # if the message is an empty one, then it means that the
                         # connected user suddenly ended the chat(an error occurred)
-                        # elif len(messageReceived) == 0:
-                        #     self.isChatRequested = 0
-                        #     inputs.clear()
-                        #     inputs.append(self.tcpServerSocket)
-                        #     print("User you're chatting with suddenly ended the chat")
-                        #     print("Press enter to quit the chat: ")
+                        elif len(messageReceived) == 0 and self.isChatRequested == 1 and len(self.serverChattingClients) == 0:
+                            self.isChatRequested = 0
+                            inputs.clear()
+                            inputs.append(self.tcpServerSocket)
+                            print(Fore.RED + "User you're chatting with ended the chat")
+                            print("Press enter to quit the chat: " + Fore.LIGHTBLACK_EX)
+                        else:
+                            inputs.remove(s)
             except OSError:
                 pass
             except ValueError:

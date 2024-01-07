@@ -56,8 +56,8 @@ class CommandLineInterface:
         while not logout:
             if (not self.logged_in) and (not self.account_created):
                 # menu selection prompt
-                print(Fore.LIGHTBLUE_EX, end='')
-                print("Choose: \n1 Create account\n2 Login")
+                print(Fore.BLUE, end='')
+                print("Choose: \n" + Fore.LIGHTBLUE_EX + "1 Create account\n2 Login")
                 print(Fore.LIGHTBLACK_EX, end='')
                 choice = input()
                 # if choice is 1, creates an account with the username
@@ -66,59 +66,45 @@ class CommandLineInterface:
                     self.create_account()
                 # if choice is 2 and user is not logged in, asks for the username
                 # and the password to login
-                elif choice == "2" and self.isOnline:
-                    print(Fore.RED + "You are already logged in!")
-
-                elif choice == "2" and not self.isOnline:
+                elif choice == "2":
                     self.user_login()
-                elif choice == "CANCEL":
+                elif choice.upper() == "CANCEL":
                     print(Fore.RESET, end='')
                     break
                 else:
                     print(Fore.RED + "Invalid input!")
 
             elif self.logged_in:
-                print(Fore.LIGHTBLUE_EX, end='')
-                print("Choose: \n1 Logout\n2 Search\n3 Start a chat\n4 List online users\n5 Create a chat room\n"
-                      "6 List chat rooms\n7 Join chat room")
+                print(Fore.BLUE, end='')
+                print("Choose: \n" + Fore.LIGHTBLUE_EX + "1 Logout\n2 Search\n3 Start a chat\n4 List online users\n5 "
+                                                         "Create a chat room\n6 List chat rooms\n7 Join chat room")
                 print(Fore.LIGHTBLACK_EX, end='')
                 choice = input()
-                # if choice is 3 and user is logged in, then user is logged out
+                # if choice is 1 and user is logged in, then user is logged out
                 # and peer variables are set, and server and client sockets are closed
-                if choice == "1" and self.isOnline:
+                if choice == "1":
                     self.user_logout()
                     # logout = True
                     self.logged_in = False
                     logout = True
-                # is peer is not logged in and exits the program
-                elif choice == "1":
-                    self.logout(2)
-                    # logout = True
-                    self.logged_in = False
-                    logout = True
-                    print(Fore.RESET, end='')
-                # if choice is 2 and user is online, then user is asked
+                # if choice is 2, then user is asked
                 # for a username that is wanted to be searched
-                elif choice == "2" and self.isOnline:
-                    self.user_search()
                 elif choice == "2":
-                    print(Fore.RED + "You have to be logged in to search for users!")
-                # if choice is 3 and user is online, then user is asked
+                    self.user_search()
+                # if choice is 3, then user is asked
                 # to enter the username of the user that is wanted to be chatted
-                elif choice == "3" and self.isOnline:
-                    self.start_chat()
                 elif choice == "3":
-                    print(Fore.RED + "You have to be logged in to start a chat!")
+                    self.start_chat()
                 elif choice == "4":
                     self.list_users()
                 elif choice == "5":
                     self.user_create_chat_room()
                 elif choice == "6":
-                    if self.list_chat_rooms() == "CANCEL":
+                    if self.list_chat_rooms().upper() == "CANCEL":
                         self.user_cancel()
                         break
                 elif choice == "7":
-                    print(Fore.LIGHTBLUE_EX + "Group name: ", end='')
+                    print(Fore.BLUE + "Group name: ", end='')
                     print(Fore.LIGHTBLACK_EX, end='')
                     group_name = input('')
                     self.user_join_chat_room(group_name)
@@ -127,13 +113,13 @@ class CommandLineInterface:
                 # prompt is printed by server if the response is ok then a client is created for this peer with the
                 # OK message and that's why it will directly send an OK message to the requesting side peer server
                 # and waits for the user input main process waits for the client thread to finish its chat
-                elif choice == "OK" and self.isOnline:
+                elif choice.upper() == "OK":
                     self.user_ok()
                 # if user rejects the chat request then reject message is sent to the requester side
-                elif choice == "REJECT" and self.isOnline:
+                elif choice.upper() == "REJECT":
                     self.user_reject()
                 # if choice is cancel timer for hello message is cancelled
-                elif choice == "CANCEL":
+                elif choice.upper() == "CANCEL":
                     self.user_cancel()
                     break
                 else:
@@ -148,22 +134,22 @@ class CommandLineInterface:
         return hashed_password
 
     def create_account(self):
-        print(Fore.LIGHTBLUE_EX + "username: ", end='')
+        print(Fore.BLUE + "username: ", end='')
         print(Fore.LIGHTBLACK_EX, end='')
         username = input('')
-        print(Fore.LIGHTBLUE_EX + "password: ", end='')
+        print(Fore.BLUE + "password: ", end='')
         print(Fore.LIGHTBLACK_EX, end='')
         confirm = False
         password = pwinput.pwinput(prompt='')
         while not confirm:
-            print(Fore.LIGHTBLUE_EX + "confirm password: ", end='')
+            print(Fore.BLUE + "confirm password: ", end='')
             print(Fore.LIGHTBLACK_EX, end='')
             confirm_password = pwinput.pwinput(prompt='')
             if confirm_password == password:
                 confirm = True
             else:
                 print(Fore.RED + "passwords doesn't match!\nEnter your password again please.")
-                print(Fore.LIGHTBLUE_EX + "password: ", end='')
+                print(Fore.BLUE + "password: ", end='')
                 print(Fore.LIGHTBLACK_EX, end='')
                 password = pwinput.pwinput(prompt='')
 
@@ -181,19 +167,21 @@ class CommandLineInterface:
         if response == "join-success":
             print(Fore.LIGHTGREEN_EX + "Account created...")
             self.account_created = True
-            print(Fore.LIGHTBLUE_EX + "Login:")
+            print(Fore.BLUE + "Login:")
         elif response == "join-exist":
             print(Fore.RED + "choose another username or login...")
 
     def user_login(self):
-        print(Fore.LIGHTBLUE_EX + "username: ", end='')
+        print(Fore.BLUE + "username: ", end='')
         print(Fore.LIGHTBLACK_EX, end='')
         username = input('')
-        print(Fore.LIGHTBLUE_EX + "password: ", end='')
+        if username.upper() == "CANCEL":
+            return
+        print(Fore.BLUE + "password: ", end='')
         print(Fore.LIGHTBLACK_EX, end='')
         password = pwinput.pwinput(prompt='')
         while True:
-            print(Fore.LIGHTBLUE_EX + "Enter a port number for peer server: ", end='')
+            print(Fore.BLUE + "Enter a port number for peer server: ", end='')
             print(Fore.LIGHTBLACK_EX, end='')
             try:
                 # asks for the port number for the server's tcp socket
@@ -212,7 +200,7 @@ class CommandLineInterface:
             # is user logs in successfully, peer variables are set
             if status == 1:
                 self.isOnline = True
-                self.loginCredentials = (username, password)
+                self.loginCredentials = (username.lower(), password)
                 self.peerServerPort = peerServerPort
                 # creates the server thread for this peer, and runs it
                 self.peerServer = PeerServer(self.loginCredentials[0], self.peerServerPort)
@@ -259,16 +247,13 @@ class CommandLineInterface:
         self.tcpClientSocket.send(message.encode())
 
     def user_search(self):
-        print(Fore.LIGHTBLUE_EX + "Username to be searched: ", end='')
+        print(Fore.BLUE + "Username to be searched: ", end='')
         print(Fore.LIGHTBLACK_EX)
         username = input('')
         if self.loginCredentials[0] == username:
             print(Fore.RED + "You can't search for yourself!")
             return
-        searchStatus = self.searchUser(username)
-        # if user is found its ip address is shown to user
-        if searchStatus is not None and searchStatus != 0:
-            print(Fore.LIGHTGREEN_EX + "IP address of " + username + " is " + searchStatus)
+        self.searchUser(username)
 
     # function for searching an online user
     def searchUser(self, username, print_flag=1):
@@ -290,9 +275,8 @@ class CommandLineInterface:
             return None
 
     def start_chat(self):
-        print(Fore.LIGHTBLUE_EX + "Enter the username of user to start chat: ", end='')
-        print(Fore.LIGHTBLACK_EX)
-        username = input('')
+        print(Fore.BLUE + "Enter the username of user to start chat: ", end='')
+        username = input(Fore.LIGHTBLACK_EX)
         if self.loginCredentials[0] == username:
             print(Fore.RED + "You can't start a chat with yourself!")
             return
@@ -321,7 +305,7 @@ class CommandLineInterface:
                 # Extract the online users from the response and display them
                 online_users = response.split()[1:]
                 if len(online_users) >= 2:
-                    print(Fore.LIGHTGREEN_EX + "Online Users:")
+                    print(Fore.BLUE + "Online Users:" + Fore.LIGHTGREEN_EX)
                     for user in online_users:
                         if user == self.loginCredentials[0]:
                             continue
@@ -359,7 +343,7 @@ class CommandLineInterface:
         self.peerServer.tcpServerSocket.close()
         if self.peerClient is not None:
             self.peerClient.tcpClientSocket.close()
-        print(Fore.LIGHTGREEN_EX + "Good Bye ")
+        print(Fore.LIGHTGREEN_EX + "Goodbye ")
         print(Fore.RESET, end='')
 
     def cancel(self):
@@ -390,7 +374,7 @@ class CommandLineInterface:
         self.peerServer.isChatRequested = 0
 
     def user_create_chat_room(self):
-        print(Fore.LIGHTBLUE_EX + "chat room name: ", end='')
+        print(Fore.BLUE + "chat room name: ", end='')
         print(Fore.LIGHTBLACK_EX, end='')
         name = input('')
 
@@ -445,7 +429,7 @@ class CommandLineInterface:
             if response.startswith("CHAT_ROOMS"):
                 # Extract the online users from the response and display them
                 chat_rooms = response.split()[1:]
-                print(Fore.LIGHTGREEN_EX + "Chat rooms:")
+                print(Fore.BLUE + "Chat rooms:" + Fore.LIGHTGREEN_EX)
                 for index, room in enumerate(chat_rooms):
                     print(f"{index + 1}: {room}")
 
@@ -455,7 +439,7 @@ class CommandLineInterface:
                     print(Fore.LIGHTBLACK_EX, end='')
                     choice = input('')
                     if choice == "1":
-                        print(Fore.LIGHTBLUE_EX + "Enter the index of the group or it's name")
+                        print(Fore.BLUE + "Enter the index of the group or it's name")
                         print(Fore.LIGHTBLACK_EX, end='')
                         group = input('')
                         if group.isdigit():
@@ -464,18 +448,22 @@ class CommandLineInterface:
                                 self.get_users_in_chat_room(chat_room_name)
                             else:
                                 self.get_users_in_chat_room(group)
-                        elif group == "CANCEL":
+                            return "None"
+                        elif group.upper() == "CANCEL":
                             return "CANCEL"
                         else:
                             self.get_users_in_chat_room(group)
+                            return "None"
 
-                    elif choice == "CANCEL":
+                    elif choice.upper() == "CANCEL":
                         return "CANCEL"
                     elif choice != "2":
                         print(Fore.RED + "Invalid input!")
+                        return "None"
             else:
                 print(Fore.RED + "No Chat rooms found.")
-            return None
+                return "None"
+            return "None"
         except ConnectionError as e:
             print(Fore.RED + f"Connection error: {e}")
         except Exception as ex:
