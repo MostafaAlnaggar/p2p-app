@@ -363,15 +363,21 @@ class CommandLineInterface:
 
     def user_ok(self):
         okMessage = "OK " + self.loginCredentials[0]
-        self.peerServer.connectedPeerSocket.send(okMessage.encode())
-        self.peerClient = PeerClient(self.peerServer.connectedPeerIP, self.peerServer.connectedPeerPort,
-                                     self.loginCredentials[0], self.peerServer, "OK")
-        self.peerClient.start()
-        self.peerClient.join()
+        if self.peerServer.connectedPeerSocket is not None:
+            self.peerServer.connectedPeerSocket.send(okMessage.encode())
+            self.peerClient = PeerClient(self.peerServer.connectedPeerIP, self.peerServer.connectedPeerPort,
+                                         self.loginCredentials[0], self.peerServer, "OK")
+            self.peerClient.start()
+            self.peerClient.join()
+        else:
+            print(Fore.RED + "No pending requests!" + Fore.LIGHTBLACK_EX)
 
     def user_reject(self):
-        self.peerServer.connectedPeerSocket.send("REJECT".encode())
-        self.peerServer.isChatRequested = 0
+        if self.peerServer.connectedPeerSocket is not None:
+            self.peerServer.connectedPeerSocket.send("REJECT".encode())
+            self.peerServer.isChatRequested = 0
+        else:
+            print(Fore.RED + "No pending requests!" + Fore.LIGHTBLACK_EX)
 
     def user_create_chat_room(self):
         print(Fore.BLUE + "chat room name: ", end='')

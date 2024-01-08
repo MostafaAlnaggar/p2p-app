@@ -32,6 +32,7 @@ class PeerServer(threading.Thread):
         # keeps the username of the peer that this peer is chatting with
         self.chattingClientName = None
         self.serverChattingClients = []
+        self.counter = 0
 
     def setServerChattingClients(self, arrayOfClients):
         self.serverChattingClients.append(arrayOfClients)
@@ -79,8 +80,12 @@ class PeerServer(threading.Thread):
                     # if the socket that receives the data is the one that
                     # is used to communicate with a connected peer, then enters here
                     else:
-                        # message is received from connected peer
-                        messageReceived = s.recv(1024).decode()
+                        if self.counter >= 3:
+                            messageReceived = ":q"
+                            self.counter = 0
+                        else:
+                            # message is received from connected peer
+                            messageReceived = s.recv(1024).decode()
                         # if message is a request message it means that this is the receiver side peer server
                         # so evaluate the chat request
                         if len(messageReceived) > 11 and messageReceived[:12] == "CHAT-REQUEST":
@@ -100,6 +105,7 @@ class PeerServer(threading.Thread):
                                 print("Enter OK to accept or REJECT to reject:  " + Fore.LIGHTBLACK_EX)
                                 # makes isChatRequested = 1 which means that peer is chatting with someone
                                 self.isChatRequested = 1
+                                self.counter = 0
                             # if the socket that we received the data does not belong to the peer that we are
                             # chatting with and if the user is already chatting with someone else(isChatRequested =
                             # 1), then enters here
@@ -110,6 +116,15 @@ class PeerServer(threading.Thread):
                                 s.send(message.encode())
                                 # remove the peer from the inputs list so that it will not monitor this socket
                                 inputs.remove(s)
+
+                        elif messageReceived == "TIMEOUT":
+                            self.isChatRequested = 0
+                            inputs.remove(s)
+                            print(Fore.RED + "Time-Out" + Fore.LIGHTBLACK_EX)
+                            print(Fore.BLUE, end='')
+                            print("Choose: \n" + Fore.LIGHTBLUE_EX + "1 Logout\n2 Search\n3 Start a chat\n4 List online users\n5 "
+                                                                   "Create a chat room\n6 List chat rooms\n7 Join chat room")
+                            print(Fore.LIGHTBLACK_EX, end='')
 
                         elif messageReceived.startswith("JOIN-CHAT-ROOM"):
                             messageReceived = messageReceived.split(" ")
@@ -127,11 +142,16 @@ class PeerServer(threading.Thread):
                         # shown to the peer of this server
                         elif messageReceived.upper() == "OK":
                             self.isChatRequested = 1
+                            self.counter = 0
                         # if an REJECT message is received then ischatrequested is made 0 so that it can receive any
                         # other chat requests
                         elif messageReceived.upper() == "REJECT":
                             self.isChatRequested = 0
                             inputs.remove(s)
+                        elif messageReceived.startswith("$&$&"):
+                            messageReceived = messageReceived.split(" ")
+                            if messageReceived[1] == self.chattingClientName:
+                                self.counter = 0
                         # if a message is received, and if this is not a quit message ':q' and
                         # if it is not an empty message, show this message to the user
                         elif messageReceived[:2] != ":q" and len(messageReceived) != 0 and self.isChatRequested == 1:
@@ -156,7 +176,8 @@ class PeerServer(threading.Thread):
 
                         # if the message is an empty one, then it means that the
                         # connected user suddenly ended the chat(an error occurred)
-                        elif len(messageReceived) == 0 and self.isChatRequested == 1 and len(self.serverChattingClients) == 0:
+                        elif len(messageReceived) == 0 and self.isChatRequested == 1 \
+                                and len(self.serverChattingClients) == 0:
                             self.isChatRequested = 0
                             inputs.clear()
                             inputs.append(self.tcpServerSocket)
@@ -164,7 +185,16 @@ class PeerServer(threading.Thread):
                             print("Press enter to quit the chat: " + Fore.LIGHTBLACK_EX)
                         else:
                             inputs.remove(s)
+
             except OSError:
                 pass
             except ValueError:
                 pass
+
+    def timerFunction(self):
+        if not self.isChatRequested:
+            self.counter = 0
+            return
+        self.counter += 1
+        timer = threading.Timer(1, self.timerFunction)
+        timer.start()

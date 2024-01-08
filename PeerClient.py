@@ -1,5 +1,6 @@
 from socket import *
 import threading
+import select
 from colorama import Fore, init
 
 init()
@@ -27,6 +28,7 @@ class PeerClient(threading.Thread):
         # keeps if this client is ending the chat or not
         self.isEndingChat = False
         self.clientChattingClients = []
+        self.timer = None
 
     def setChattingClients(self, peerServers):
         self.clientChattingClients.append(peerServers)
@@ -42,13 +44,29 @@ class PeerClient(threading.Thread):
             # server this client connects
             requestMessage = "CHAT-REQUEST " + str(self.peerServer.peerServerPort) + " " + self.username
             # sends the chat request
-            self.tcpClientSocket.send(requestMessage.encode())
+            try:
+                self.tcpClientSocket.send(requestMessage.encode())
+            except ConnectionError:
+                pass
             print(Fore.LIGHTGREEN_EX + "Request message " + requestMessage + " is sent...")
             print(Fore.LIGHTBLACK_EX, end="")
             # received a response from the peer which the request message is sent to
-            self.responseReceived = self.tcpClientSocket.recv(1024).decode()
-            # print(Fore.LIGHTGREEN_EX + "Response is " + self.responseReceived)
-            # print(Fore.LIGHTBLACK_EX, end="")
+            self.tcpClientSocket.setblocking(False)  # Set socket to non-blocking mode
+            ready = select.select([self.tcpClientSocket], [], [], 60)  # Wait for 1 minute for data to be available
+
+            if ready[0]:
+                self.responseReceived = self.tcpClientSocket.recv(1024).decode()
+            else:
+                print(
+                    Fore.RED + "No response received within 1 minutes." + Fore.LIGHTBLACK_EX)
+                self.responseReceived = "REJECT"
+                requestMessage = "TIMEOUT"
+
+                try:
+                    # sends the chat request
+                    self.tcpClientSocket.send(requestMessage.encode())
+                except ConnectionError:
+                    pass
             # parses the response for the chat request
             self.responseReceived = self.responseReceived.split()
             # if response is ok then incoming messages will be evaluated as client messages and will be sent to the
@@ -58,12 +76,19 @@ class PeerClient(threading.Thread):
                 self.peerServer.isChatRequested = 1
                 # sets the server variable with the username of the peer that this one is chatting
                 self.peerServer.chattingClientName = self.responseReceived[1]
+                print(Fore.LIGHTGREEN_EX + f"{self.peerServer.chattingClientName} accepted the request"
+                      + Fore.LIGHTBLACK_EX)
+                self.peerServer.timerFunction()
+                self.sendOnlineMessage()
                 # as long as the server status is chatting, this client can send messages
                 while self.peerServer.isChatRequested == 1:
                     # message input prompt
                     messageSent = input(Fore.LIGHTBLACK_EX)
                     # sends the message to the connected peer
-                    self.tcpClientSocket.send(messageSent.encode())
+                    try:
+                        self.tcpClientSocket.send(messageSent.encode())
+                    except ConnectionError:
+                        pass
                     # if the quit message is sent, then the server status is changed to not chatting
                     # and this is the side that is ending the chat
                     if messageSent == ":q":
@@ -76,7 +101,7 @@ class PeerClient(threading.Thread):
                         # tries to send a quit message to the connected peer
                         try:
                             self.tcpClientSocket.send(":q ending-side".encode())
-                        except BrokenPipeError:
+                        except ConnectionError:
                             pass
                     # closes the socket
                     self.responseReceived = None
@@ -86,7 +111,10 @@ class PeerClient(threading.Thread):
                 self.peerServer.isChatRequested = 0
                 print(Fore.RED + "client of requester is closing...")
                 print(Fore.LIGHTBLACK_EX, end="")
-                self.tcpClientSocket.send("REJECT".encode())
+                try:
+                    self.tcpClientSocket.send("REJECT".encode())
+                except ConnectionError:
+                    pass
                 self.tcpClientSocket.close()
             # if a busy response is received, closes the socket
             elif self.responseReceived[0] == "BUSY":
@@ -100,14 +128,22 @@ class PeerClient(threading.Thread):
             self.peerServer.isChatRequested = 1
             # ok response is sent to the requester side
             okMessage = "OK"
-            self.tcpClientSocket.send(okMessage.encode())
+            try:
+                self.tcpClientSocket.send(okMessage.encode())
+            except ConnectionError:
+                pass
             print(Fore.LIGHTGREEN_EX + "Client with OK message is created... and sending messages")
             print(Fore.LIGHTBLACK_EX, end="")
+            self.peerServer.timerFunction()
+            self.sendOnlineMessage()
             # client can send messages as long as the server status is chatting
             while self.peerServer.isChatRequested == 1:
                 # input prompt for user to enter message
                 messageSent = input(Fore.LIGHTBLACK_EX)
-                self.tcpClientSocket.send(messageSent.encode())
+                try:
+                    self.tcpClientSocket.send(messageSent.encode())
+                except ConnectionError:
+                    pass
                 # if a quit message is sent, server status is changed
                 if messageSent == ":q":
                     self.peerServer.isChatRequested = 0
@@ -118,7 +154,10 @@ class PeerClient(threading.Thread):
             # then closes the socket
             if self.peerServer.isChatRequested == 0:
                 if not self.isEndingChat:
-                    self.tcpClientSocket.send(":q ending-side".encode())
+                    try:
+                        self.tcpClientSocket.send(":q ending-side".encode())
+                    except ConnectionError:
+                        pass
                 self.responseReceived = None
                 self.tcpClientSocket.close()
 
@@ -156,18 +195,18 @@ class PeerClient(threading.Thread):
                 self.updateClients(socketsArray)
 
                 if messageSent == ":q":
+                    self.peerServer.isChatRequested = 0
                     for socketElement in socketsArray:
                         try:
                             self.isEndingChat = True
-                            self.peerServer.isChatRequested = 0
                             message = "LEAVE-CHAT-ROOM " + self.peerServer.peerServerHostname + " " + str(
                                 self.peerServer.peerServerPort) + " " + self.username + " " + random_color + " "
                             socketElement.send(message.encode())
                             socketElement.close()
                             self.peerServer.serverChattingClients.clear()
 
-                        except BrokenPipeError:
-                            pass
+                        except ConnectionError:
+                            socketsArray.remove(socketElement)
                     socketsArray.clear()
                     registryName = gethostbyname(gethostname())
                     registryPort = 15600
@@ -183,15 +222,13 @@ class PeerClient(threading.Thread):
                     for socketElement in socketsArray:
                         try:
                             socketElement.send((self.username + "#%#" + messageSent + "#%#" + random_color).encode())
-                        except ConnectionError as e:
-                            print(Fore.RED + f"Connection error: {e}")
-                            print(Fore.LIGHTBLACK_EX, end="")
+                        except ConnectionError:
+                            # print(random_color + "User left the chat room")
+                            socketsArray.remove(socketElement)
                         except Exception as ex:
                             print(Fore.RED + f"An error occurred: {ex}")
                             print(Fore.LIGHTBLACK_EX, end="")
 
-                # if the quit message is sent, then the server status is changed to not chatting
-                # and this is the side that is ending the chat
             # closes the socket
             for socketElement in socketsArray:
                 socketElement.close()
@@ -221,3 +258,13 @@ class PeerClient(threading.Thread):
                 if not(server[0] == self.peerServer.peerServerHostname and server[1] == self.peerServer.peerServerPort):
                     socketsArray.append(socket(AF_INET, SOCK_STREAM))
                     socketsArray[-1].connect((server[0], server[1]))
+
+    def sendOnlineMessage(self):
+        if self.peerServer.isChatRequested:
+            try:
+                message = "$&$& " + self.username
+                self.tcpClientSocket.send(message.encode())
+                self.timer = threading.Timer(1, self.sendOnlineMessage)
+                self.timer.start()
+            except ConnectionError:
+                pass
